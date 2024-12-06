@@ -8,6 +8,15 @@
 \description{
 What the package does (one paragraph).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/r-staceans/multiverse}
+  \item \url{https://r-staceans.github.io/multiverse/}
+  \item Report bugs at \url{https://github.com/r-staceans/multiverse/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Jackson Hoffart \email{jackson.hoffart@gmail.com} (\href{https://orcid.org/0000-0002-8600-5042}{ORCID})
 
