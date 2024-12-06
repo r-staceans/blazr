@@ -1,4 +1,5 @@
 url: https://r-staceans.github.io/multiverse/
 template:
   bootstrap: 5
-
+development:
+  mode: auto
