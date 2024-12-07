@@ -6,3 +6,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+
+^src/rust/.cargo$
+^src/rust/target$
