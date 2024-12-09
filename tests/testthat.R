@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(multiverse)
+library(blazr)
 
-test_check("multiverse")
+test_check("blazr")
