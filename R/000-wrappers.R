@@ -5,7 +5,7 @@
 #   first, which allows users to override the functions defined here (e.g., a
 #   print() method for an enum).
 
-#' @useDynLib multiverse, .registration = TRUE
+#' @useDynLib blazr, .registration = TRUE
 #' @keywords internal
 NULL
 
@@ -26,13 +26,13 @@ NULL
 # Prohibit modifying environments
 
 #' @export
-`$<-.savvy_multiverse__sealed` <- function(x, name, value) {
+`$<-.savvy_blazr__sealed` <- function(x, name, value) {
   class <- gsub("__bundle$", "", class(x)[1])
   stop(class, " cannot be modified", call. = FALSE)
 }
 
 #' @export
-`[[<-.savvy_multiverse__sealed` <- function(x, i, value) {
+`[[<-.savvy_blazr__sealed` <- function(x, i, value) {
   class <- gsub("__bundle$", "", class(x)[1])
   stop(class, " cannot be modified", call. = FALSE)
 }
@@ -76,7 +76,7 @@ NULL
   e$`set_name` <- `Person_set_name`(ptr)
   e$`name` <- `Person_name`(ptr)
 
-  class(e) <- c("Person", "savvy_multiverse__sealed")
+  class(e) <- c("Person", "savvy_blazr__sealed")
   e
 }
 
@@ -95,10 +95,9 @@ NULL
 }
 
 
-class(`Person`) <- c("Person__bundle", "savvy_multiverse__sealed")
+class(`Person`) <- c("Person__bundle", "savvy_blazr__sealed")
 
 #' @export
 `print.Person__bundle` <- function(x, ...) {
   cat('Person')
 }
-
