@@ -1,21 +1,29 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 
 # blazr <a href="https://r-staceans.github.io/blazr/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/r-staceans/blazr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-staceans/blazr/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](https://codecov.io/gh/r-staceans/blazr/graph/badge.svg)](https://app.codecov.io/gh/r-staceans/blazr)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Codecov test coverage](https://codecov.io/gh/r-staceans/blazr/graph/badge.svg)](https://app.codecov.io/gh/r-staceans/blazr)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 ⚠️ **This package is a work in progress and is not yet ready for use.**
 
-The goal of blazr is to provide R with a blazingly fast interface to
-multi-threading in Rust.
+The goal of blazr is to provide R with a blazingly fast interface to multi-threading in Rust.
 
 ## Installation
 
@@ -30,9 +38,8 @@ pak::pak("r-staceans/blazr")
 
 This is just a dummy example:
 
-``` r
+```{r example}
 library(blazr)
 
 blazr::to_upper("hello, world")
-#> [1] "HELLO, WORLD"
 ```
