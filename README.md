@@ -4,3 +4,25 @@
 [![Codecov test coverage](https://codecov.io/gh/r-staceans/blazr/graph/badge.svg)](https://app.codecov.io/gh/r-staceans/blazr)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
+
+⚠️ **This package is a work in progress and is not yet ready for use.**
+
+The goal of blazr is to provide R with a blazingly fast interface to multi-threading in Rust.
+
+## Installation
+
+Install the development version of `blazr` from GitHub with:
+
+``` r
+# install.packages("pak")
+pak::pak("r-staceans/blazr")
+```
+## Example
+
+This is just a dummy example:
+
+``` r
+library(blazr)
+
+blazr::to_upper("hello, world")
+```
