@@ -15,10 +15,14 @@ permissions: read-all
 jobs:
   render-rmarkdown:
     runs-on: ubuntu-latest
+    # Only restrict concurrency for non-PR jobs
+    concurrency:
+      group: rmarkdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
+      
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
