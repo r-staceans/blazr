@@ -28,14 +28,15 @@ jobs:
       - name: Showing GH context refs
         shell: bash
         run: |
-          echo github.head_ref ${{ github.head_ref }}
-          echo github.ref ${{ github.ref }}
-          echo github.ref_name ${{ github.ref_name }}
+          echo github.head_ref: ${{ github.head_ref }}
+          echo github.ref: ${{ github.ref }}
+          echo github.ref_name: ${{ github.ref_name }}
+          echo github.base.ref: ${{ github.base.ref }}
           
       - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.base.ref }}
           fetch-depth: 0
 
       - name: Setup R
