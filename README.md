@@ -28,11 +28,64 @@ pak::pak("r-staceans/blazr")
 
 ## Example
 
-This is just a dummy example:
+Here’s a simple example, computing the sum of a vector of integers,
+using multiple threads:
 
 ``` r
 library(blazr)
 
-blazr::to_upper("hello, world")
-#> [1] "HELLO, WORLD"
+create_int_vector <- function(n) {
+  set.seed(42)
+  sample.int(100, n, replace = TRUE)
+}
+
+n <- 1e8
+
+x <- create_int_vector(n)
+
+blazr::sum_with_threads(
+  x,
+  n = 2L
+)
+#> [1] 754832969
 ```
+
+## Benchmarking
+
+When running this sum against very large numbers, we can see the
+performance benefits of using multiple threads:
+
+``` r
+library(bench)
+library(ggplot2)
+
+results <- bench::press(
+  size = c(1e7, 1e8, 1e9),
+  {
+    x = create_int_vector(n)
+    bench::mark(
+      single_thread = {
+        blazr::sum_with_threads(
+          x,
+          n = 1L
+        )
+      },
+      multi_thread = {
+        blazr::sum_with_threads(
+          x,
+          n = 4L
+        )
+      }
+    )
+  })
+#> Running with:
+#>         size
+#> 1   10000000
+#> 2  100000000
+#> 3 1000000000
+
+ggplot2::autoplot(results)
+#> Loading required namespace: tidyr
+```
+
+<img src="man/figures/README-benchmark-1.png" width="100%" />
