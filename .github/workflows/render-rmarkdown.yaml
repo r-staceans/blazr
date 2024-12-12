@@ -32,8 +32,11 @@ jobs:
           echo github.ref ${{ github.ref }}
           echo github.ref_name ${{ github.ref_name }}
           
-      - name: Checkout repo
+      - name: Checkout PR branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
 
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
