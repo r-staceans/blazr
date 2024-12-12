@@ -42,5 +42,4 @@ This is just a dummy example:
 library(blazr)
 
 blazr::to_upper("hello, world")
-blazr::to_upper("hello, human")
 ```
