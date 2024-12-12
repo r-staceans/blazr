@@ -1,7 +1,7 @@
 use savvy::{savvy, IntegerSexp, Sexp};
 use std::thread;
 
-/// Convert to Upper-case
+/// Calculate the sum of a vector of integers using multiple threads.
 ///
 /// @param x A vector of integers to sum over.
 /// @param n The number of threads used to compute this calculation (int).
