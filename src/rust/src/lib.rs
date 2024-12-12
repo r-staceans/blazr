@@ -1,6 +1,11 @@
 use std::thread;
 
 fn sum_with_threads_impl(x: Vec<i32>, n: usize) -> i32 {
+    if x.is_empty() {
+        eprintln!("Input vector is empty. Returning 0.");
+        return 0;
+    }
+
     // Ensure n doesn't exceed the number of elements
     let n = n.min(x.len());
     let chunk_size = (x.len() + n - 1) / n; // Divide the elements into approximately equal chunks
