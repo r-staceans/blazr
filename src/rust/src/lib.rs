@@ -1,4 +1,22 @@
+use savvy::{savvy, IntegerSexp, Sexp};
 use std::thread;
+
+/// Convert to Upper-case
+///
+/// @param x A vector of integers to sum over.
+/// @param n The number of threads used to compute this calculation (int).
+///
+/// @return The sum of all elements of the input vector.
+///
+/// @export
+#[savvy]
+fn sum_with_threads(x: IntegerSexp, n: i32) -> savvy::Result<Sexp> {
+    let x_rust = x.to_vec();
+    let n_usize: usize = n as usize;
+
+    let out = sum_with_threads_impl(x_rust, n_usize);
+    out.try_into()
+}
 
 fn sum_with_threads_impl(x: Vec<i32>, n: usize) -> i32 {
     if x.is_empty() {
