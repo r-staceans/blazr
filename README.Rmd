@@ -43,11 +43,3 @@ library(blazr)
 
 blazr::to_upper("hello, world")
 ```
-
-Testing dummy example with GH actions Rmd render
-
-```{r example2}
-library(blazr)
-
-blazr::to_upper("This is a test ... again")
-```
