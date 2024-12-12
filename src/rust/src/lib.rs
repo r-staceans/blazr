@@ -24,15 +24,65 @@ fn sum_with_threads_impl(x: Vec<i32>, n: usize) -> i32 {
 // This test is run by `cargo test`. You can put tests that don't need a real
 // R session here.
 #[cfg(test)]
-mod test1 {
+mod tests {
     use crate::sum_with_threads_impl;
 
     #[test]
-    fn test_sum_with_threads_impl_basic() {
+    fn test_single_thread() {
+        let numbers = vec![1, 2, 3, 4, 5];
+        let n = 1; // Single thread
+        assert_eq!(sum_with_threads_impl(numbers, n), 15);
+    }
+
+    #[test]
+    fn test_multiple_threads() {
         let x = vec![1, 2, 3, 4];
         let num_threads = 2;
 
         let result = sum_with_threads_impl(x, num_threads);
         assert_eq!(result, 10);
+    }
+
+    #[test]
+    fn test_more_threads_than_elements() {
+        let numbers = vec![1, 2, 3, 4, 5];
+        let n = 10; // More threads than elements
+        assert_eq!(sum_with_threads_impl(numbers, n), 15);
+    }
+
+    #[test]
+    fn test_empty_vector() {
+        let numbers: Vec<i32> = vec![];
+        let n = 4; // Any number of threads
+        assert_eq!(sum_with_threads_impl(numbers, n), 0);
+    }
+
+    #[test]
+    fn test_large_numbers() {
+        let numbers = vec![1_000_000, 2_000_000, 3_000_000];
+        let n = 3; // Three threads
+        assert_eq!(sum_with_threads_impl(numbers, n), 6_000_000);
+    }
+
+    #[test]
+    fn test_negative_numbers() {
+        let numbers = vec![-1, -2, -3, -4, -5];
+        let n = 2; // Two threads
+        assert_eq!(sum_with_threads_impl(numbers, n), -15);
+    }
+
+    #[test]
+    fn test_mixed_numbers() {
+        let numbers = vec![-1, 2, -3, 4, -5, 6];
+        let n = 3; // Three threads
+        assert_eq!(sum_with_threads_impl(numbers, n), 3);
+    }
+
+    #[test]
+    fn test_large_vector() {
+        let numbers: Vec<i32> = (1..=1_000).collect(); // Vector with numbers from 1 to 1000
+        let n = 4; // Four threads
+        let expected_sum: i32 = (1..=1_000).sum();
+        assert_eq!(sum_with_threads_impl(numbers, n), expected_sum);
     }
 }
