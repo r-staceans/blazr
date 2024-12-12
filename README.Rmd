@@ -29,7 +29,7 @@ The goal of blazr is to provide R with a blazingly fast interface to multi-threa
 
 Install the development version of `blazr` from GitHub with:
 
-``` r
+```{r}
 # install.packages("pak")
 pak::pak("r-staceans/blazr")
 ```
