@@ -2,7 +2,5 @@
 
 S3method("$<-",savvy_blazr__sealed)
 S3method("[[<-",savvy_blazr__sealed)
-S3method(print,Person__bundle)
-export(int_times_int)
-export(to_upper)
+export(sum_with_threads)
 useDynLib(blazr, .registration = TRUE)

@@ -1,117 +1,106 @@
-// Example functions
+use savvy::{savvy, IntegerSexp, Sexp};
+use std::thread;
 
-use savvy::savvy;
-
-use savvy::{IntegerSexp, OwnedIntegerSexp, OwnedStringSexp, StringSexp};
-
-use savvy::NotAvailableValue;
-
-/// Convert Input To Upper-Case
+/// Calculate the sum of a vector of integers using multiple threads.
 ///
-/// @param x A character vector.
-/// @returns A character vector with upper case version of the input.
-/// @export
-#[savvy]
-fn to_upper(x: StringSexp) -> savvy::Result<savvy::Sexp> {
-    let mut out = OwnedStringSexp::new(x.len())?;
-
-    for (i, e) in x.iter().enumerate() {
-        if e.is_na() {
-            out.set_na(i)?;
-            continue;
-        }
-
-        let e_upper = e.to_uppercase();
-        out.set_elt(i, &e_upper)?;
-    }
-
-    Ok(out.into())
-}
-
-/// Multiply Input By Another Input
+/// @param x A vector of integers to sum over.
+/// @param n The number of threads used to compute this calculation (int).
 ///
-/// @param x An integer vector.
-/// @param y An integer to multiply.
-/// @returns An integer vector with values multiplied by `y`.
-/// @export
-#[savvy]
-fn int_times_int(x: IntegerSexp, y: i32) -> savvy::Result<savvy::Sexp> {
-    let mut out = OwnedIntegerSexp::new(x.len())?;
-
-    for (i, e) in x.iter().enumerate() {
-        if e.is_na() {
-            out.set_na(i)?;
-        } else {
-            out[i] = e * y;
-        }
-    }
-
-    Ok(out.into())
-}
-
-#[savvy]
-struct Person {
-    pub name: String,
-}
-
-/// A person with a name
+/// @return The sum of all elements of the input vector.
 ///
 /// @export
 #[savvy]
-impl Person {
-    fn new() -> Self {
-        Self {
-            name: "".to_string(),
-        }
-    }
+fn sum_with_threads(x: IntegerSexp, n: i32) -> savvy::Result<Sexp> {
+    let x_rust = x.to_vec();
+    let n_usize: usize = n as usize;
 
-    fn set_name(&mut self, name: &str) -> savvy::Result<()> {
-        self.name = name.to_string();
-        Ok(())
-    }
-
-    fn name(&self) -> savvy::Result<savvy::Sexp> {
-        let mut out = OwnedStringSexp::new(1)?;
-        out.set_elt(0, &self.name)?;
-        Ok(out.into())
-    }
-
-    fn associated_function() -> savvy::Result<savvy::Sexp> {
-        let mut out = OwnedStringSexp::new(1)?;
-        out.set_elt(0, "associated_function")?;
-        Ok(out.into())
-    }
+    let out = sum_with_threads_impl(x_rust, n_usize);
+    out.try_into()
 }
 
-// This test is run by `cargo test`. You can put tests that don't need a real
-// R session here.
+fn sum_with_threads_impl(x: Vec<i32>, n: usize) -> i32 {
+    if x.is_empty() {
+        eprintln!("Input vector is empty. Returning 0.");
+        return 0;
+    }
+
+    let n = n.min(x.len());
+    let chunk_size = (x.len() + n - 1) / n;
+
+    let mut handles = Vec::new();
+    for i in 0..n {
+        let chunk = x[i * chunk_size..((i + 1) * chunk_size).min(x.len())].to_vec();
+        handles.push(thread::spawn(move || chunk.iter().sum::<i32>()));
+    }
+
+    let mut total_sum = 0;
+    for handle in handles {
+        total_sum += handle.join().expect("Thread panicked");
+    }
+
+    total_sum
+}
+
 #[cfg(test)]
-mod test1 {
+mod tests {
+    use crate::sum_with_threads_impl;
+
     #[test]
-    fn test_person() {
-        let mut p = super::Person::new();
-        p.set_name("foo").expect("set_name() must succeed");
-        assert_eq!(&p.name, "foo");
+    fn test_single_thread() {
+        let numbers = vec![1, 2, 3, 4, 5];
+        let n = 1;
+        assert_eq!(sum_with_threads_impl(numbers, n), 15);
     }
-}
 
-// Tests marked under `#[cfg(feature = "savvy-test")]` are run by `savvy-cli test`, which
-// executes the Rust code on a real R session so that you can use R things for
-// testing.
-#[cfg(feature = "savvy-test")]
-mod test1 {
-    // The return type must be `savvy::Result<()>`
     #[test]
-    fn test_to_upper() -> savvy::Result<()> {
-        // You can create a non-owned version of input by `.as_read_only()`
-        let x = savvy::OwnedStringSexp::try_from_slice(["foo", "bar"])?.as_read_only();
+    fn test_multiple_threads() {
+        let x = vec![1, 2, 3, 4];
+        let num_threads = 2;
 
-        let result = super::to_upper(x)?;
+        let result = sum_with_threads_impl(x, num_threads);
+        assert_eq!(result, 10);
+    }
 
-        // This function compares an SEXP with the result of R code specified in
-        // the second argument.
-        savvy::assert_eq_r_code(result, r#"c("FOO", "BAR")"#);
+    #[test]
+    fn test_more_threads_than_elements() {
+        let numbers = vec![1, 2, 3, 4, 5];
+        let n = 10;
+        assert_eq!(sum_with_threads_impl(numbers, n), 15);
+    }
 
-        Ok(())
+    #[test]
+    fn test_empty_vector() {
+        let numbers: Vec<i32> = vec![];
+        let n = 4;
+        assert_eq!(sum_with_threads_impl(numbers, n), 0);
+    }
+
+    #[test]
+    fn test_large_numbers() {
+        let numbers = vec![1_000_000, 2_000_000, 3_000_000];
+        let n = 3;
+        assert_eq!(sum_with_threads_impl(numbers, n), 6_000_000);
+    }
+
+    #[test]
+    fn test_negative_numbers() {
+        let numbers = vec![-1, -2, -3, -4, -5];
+        let n = 2;
+        assert_eq!(sum_with_threads_impl(numbers, n), -15);
+    }
+
+    #[test]
+    fn test_mixed_numbers() {
+        let numbers = vec![-1, 2, -3, 4, -5, 6];
+        let n = 3;
+        assert_eq!(sum_with_threads_impl(numbers, n), 3);
+    }
+
+    #[test]
+    fn test_large_vector() {
+        let numbers: Vec<i32> = (1..=1_000).collect();
+        let n = 4;
+        let expected_sum: i32 = (1..=1_000).sum();
+        assert_eq!(sum_with_threads_impl(numbers, n), expected_sum);
     }
 }

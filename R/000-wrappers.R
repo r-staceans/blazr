@@ -37,67 +37,16 @@ NULL
   stop(class, " cannot be modified", call. = FALSE)
 }
 
-#' Convert Input To Upper-Case
+#' Calculate the sum of a vector of integers using multiple threads.
 #'
-#' @param x A character vector.
-#' @returns A character vector with upper case version of the input.
-#' @export
-`to_upper` <- function(`x`) {
-  .Call(savvy_to_upper__impl, `x`)
-}
-
-#' Multiply Input By Another Input
+#' @param x A vector of integers to sum over.
+#' @param n The number of threads used to compute this calculation (int).
 #'
-#' @param x An integer vector.
-#' @param y An integer to multiply.
-#' @returns An integer vector with values multiplied by `y`.
+#' @return The sum of all elements of the input vector.
+#'
 #' @export
-`int_times_int` <- function(`x`, `y`) {
-  .Call(savvy_int_times_int__impl, `x`, `y`)
-}
-
-### wrapper functions for Person
-
-`Person_set_name` <- function(self) {
-  function(`name`) {
-    invisible(.Call(savvy_Person_set_name__impl, `self`, `name`))
-  }
-}
-
-`Person_name` <- function(self) {
-  function() {
-    .Call(savvy_Person_name__impl, `self`)
-  }
-}
-
-`.savvy_wrap_Person` <- function(ptr) {
-  e <- new.env(parent = emptyenv())
-  e$.ptr <- ptr
-  e$`set_name` <- `Person_set_name`(ptr)
-  e$`name` <- `Person_name`(ptr)
-
-  class(e) <- c("Person", "savvy_blazr__sealed")
-  e
+`sum_with_threads` <- function(`x`, `n`) {
+  .Call(savvy_sum_with_threads__impl, `x`, `n`)
 }
 
 
-
-`Person` <- new.env(parent = emptyenv())
-
-### associated functions for Person
-
-`Person`$`new` <- function() {
-  .savvy_wrap_Person(.Call(savvy_Person_new__impl))
-}
-
-`Person`$`associated_function` <- function() {
-  .Call(savvy_Person_associated_function__impl)
-}
-
-
-class(`Person`) <- c("Person__bundle", "savvy_blazr__sealed")
-
-#' @export
-`print.Person__bundle` <- function(x, ...) {
-  cat('Person')
-}
