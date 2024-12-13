@@ -1,5 +1,6 @@
 url: https://r-staceans.github.io/blazr/
 template:
   bootstrap: 5
+  bootswatch: minty
 development:
   mode: auto
