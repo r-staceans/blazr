@@ -73,12 +73,61 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is just a dummy example:</p>
+<p>Here’s a simple example, computing the sum of a vector of integers, using multiple threads:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-staceans/blazr" class="external-link">blazr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">blazr</span><span class="fu">::</span><span class="fu"><a href="reference/to_upper.html">to_upper</a></span><span class="op">(</span><span class="st">"hello, world"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "HELLO, WORLD"</span></span></code></pre></div>
+<span><span class="va">create_int_vector</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="fl">100</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e8</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">create_int_vector</span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">blazr</span><span class="fu">::</span><span class="fu"><a href="reference/sum_with_threads.html">sum_with_threads</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">2L</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 754832969</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="benchmarking">Benchmarking<a class="anchor" aria-label="anchor" href="#benchmarking"></a>
+</h2>
+<p>When running this sum against very large numbers, we can see the performance benefits of using multiple threads:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bench.r-lib.org/" class="external-link">bench</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">press</span><span class="op">(</span></span>
+<span>  size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1e7</span>, <span class="fl">1e8</span>, <span class="fl">1e9</span><span class="op">)</span>,</span>
+<span>  <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">=</span> <span class="fu">create_int_vector</span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
+<span>      single_thread <span class="op">=</span> <span class="op">{</span></span>
+<span>        <span class="fu">blazr</span><span class="fu">::</span><span class="fu"><a href="reference/sum_with_threads.html">sum_with_threads</a></span><span class="op">(</span></span>
+<span>          <span class="va">x</span>,</span>
+<span>          n <span class="op">=</span> <span class="fl">1L</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">}</span>,</span>
+<span>      multi_thread <span class="op">=</span> <span class="op">{</span></span>
+<span>        <span class="fu">blazr</span><span class="fu">::</span><span class="fu"><a href="reference/sum_with_threads.html">sum_with_threads</a></span><span class="op">(</span></span>
+<span>          <span class="va">x</span>,</span>
+<span>          n <span class="op">=</span> <span class="fl">4L</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">}</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Running with:</span></span>
+<span><span class="co">#&gt;         size</span></span>
+<span><span class="co">#&gt; 1   10000000</span></span>
+<span><span class="co">#&gt; 2  100000000</span></span>
+<span><span class="co">#&gt; 3 1000000000</span></span>
+<span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu">autoplot</span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required namespace: tidyr</span></span></code></pre></div>
+<p><img src="reference/figures/README-benchmark-1.png" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
