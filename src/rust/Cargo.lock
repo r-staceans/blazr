@@ -3,9 +3,16 @@
 version = 4
 
 [[package]]
+name = "autocfg"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
+
+[[package]]
 name = "blazr"
 version = "0.1.0"
 dependencies = [
+ "num-complex",
  "savvy",
 ]
 
@@ -16,6 +23,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "27f657647bcff5394bf56c7317665bbf790a137a50eaaa5c6bfbb9e27a518f2d"
 dependencies = [
  "shlex",
+]
+
+[[package]]
+name = "num-complex"
+version = "0.4.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "73f88a1307638156682bada9d7604135552957b7818057dcef22705b4d509495"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
+name = "num-traits"
+version = "0.2.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
+dependencies = [
+ "autocfg",
 ]
 
 [[package]]
@@ -55,6 +80,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5cf7cda5d3886a972506ccaf904274b5ac6aed444ae0de9215b72465bc57c074"
 dependencies = [
  "cc",
+ "num-complex",
  "once_cell",
  "rustversion",
  "savvy-ffi",
@@ -77,6 +103,9 @@ name = "savvy-ffi"
 version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc41ea3d0dcba6f162e7e7148e1f0dcc9ae6a7b480d24727b2b17f9500e4c2bc"
+dependencies = [
+ "num-complex",
+]
 
 [[package]]
 name = "savvy-macro"

@@ -1,4 +1,4 @@
-use savvy::{savvy, IntegerSexp, Sexp};
+use savvy::{savvy, ComplexSexp, Sexp};
 use std::thread;
 
 /// Calculate the sum of a vector of integers using multiple threads.
@@ -10,7 +10,7 @@ use std::thread;
 ///
 /// @export
 #[savvy]
-fn sum_with_threads(x: IntegerSexp, n: i32) -> savvy::Result<Sexp> {
+fn sum_with_threads(x: ComplexSexp, n: i32) -> savvy::Result<Sexp> {
     let x_rust = x.to_vec();
     let n_usize: usize = n as usize;
 
@@ -18,10 +18,10 @@ fn sum_with_threads(x: IntegerSexp, n: i32) -> savvy::Result<Sexp> {
     out.try_into()
 }
 
-fn sum_with_threads_impl(x: Vec<i32>, n: usize) -> i32 {
+fn sum_with_threads_impl(x: Vec<num_complex::Complex<f64>>, n: usize) -> f64 {
     if x.is_empty() {
         eprintln!("Input vector is empty. Returning 0.");
-        return 0;
+        return 0.0;
     }
 
     let n = n.min(x.len());
@@ -30,10 +30,10 @@ fn sum_with_threads_impl(x: Vec<i32>, n: usize) -> i32 {
     let mut handles = Vec::new();
     for i in 0..n {
         let chunk = x[i * chunk_size..((i + 1) * chunk_size).min(x.len())].to_vec();
-        handles.push(thread::spawn(move || chunk.iter().sum::<i32>()));
+        handles.push(thread::spawn(move || chunk.iter().sum::<f64>()));
     }
 
-    let mut total_sum = 0;
+    let mut total_sum = 0.0;
     for handle in handles {
         total_sum += handle.join().expect("Thread panicked");
     }
@@ -94,6 +94,13 @@ mod tests {
         let numbers = vec![-1, 2, -3, 4, -5, 6];
         let n = 3;
         assert_eq!(sum_with_threads_impl(numbers, n), 3);
+    }
+
+    #[test]
+    fn test_doubles_numbers() {
+        let numbers = vec![-1.5, 2.0, -3.5, 4.0, -5.0, 6.5];
+        let n = 3;
+        assert_eq!(sum_with_threads_impl(numbers, n), 2.5);
     }
 
     #[test]
