@@ -1,4 +1,4 @@
-use savvy::{savvy, ComplexSexp, Sexp};
+use savvy::{savvy, NumericSexp, Sexp};
 use std::thread;
 
 /// Calculate the sum of a vector of integers using multiple threads.
@@ -10,7 +10,7 @@ use std::thread;
 ///
 /// @export
 #[savvy]
-fn sum_with_threads(x: ComplexSexp, n: i32) -> savvy::Result<Sexp> {
+fn sum_with_threads(x: NumericSexp, n: i32) -> savvy::Result<Sexp> {
     let x_rust = x.to_vec();
     let n_usize: usize = n as usize;
 
@@ -18,7 +18,7 @@ fn sum_with_threads(x: ComplexSexp, n: i32) -> savvy::Result<Sexp> {
     out.try_into()
 }
 
-fn sum_with_threads_impl(x: Vec<num_complex::Complex<f64>>, n: usize) -> f64 {
+fn sum_with_threads_impl(x: Vec<f64>, n: usize) -> f64 {
     if x.is_empty() {
         eprintln!("Input vector is empty. Returning 0.");
         return 0.0;

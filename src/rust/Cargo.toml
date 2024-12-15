@@ -7,8 +7,7 @@ edition = "2021"
 crate-type = ["staticlib", "lib"]
 
 [dependencies]
- savvy = { version = "0.8.1", features = ["complex"] }
- num-complex = "0.4.6"
+ savvy = "*"
 
 [features]
 savvy-test = []
