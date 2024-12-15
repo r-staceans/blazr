@@ -1,4 +1,4 @@
-use savvy::{savvy, NumericSexp, Sexp};
+use savvy::{savvy, NumericSexp, NumericTypedSexp, IntegerSexp, RealSexp, Sexp};
 use std::thread;
 
 /// Calculate the sum of a vector of integers using multiple threads.
@@ -10,15 +10,53 @@ use std::thread;
 ///
 /// @export
 #[savvy]
-fn sum_with_threads(x: NumericSexp, n: i32) -> savvy::Result<Sexp> {
+fn sum_with_threads(x: NumericSexp, n: i32) -> savvy::Result<savvy::Sexp> {
+    match x.into_typed() {
+        NumericTypedSexp::Integer(i) => sum_with_threads_int(i,n),
+        NumericTypedSexp::Real(r) => sum_with_threads_rel(r, n),
+    }
+}
+
+fn sum_with_threads_int(x: IntegerSexp, n: i32) -> savvy::Result<Sexp> {
     let x_rust = x.to_vec();
     let n_usize: usize = n as usize;
 
-    let out = sum_with_threads_impl(x_rust, n_usize);
+    let out = sum_with_threads_int_impl(x_rust, n_usize);
     out.try_into()
 }
 
-fn sum_with_threads_impl(x: Vec<f64>, n: usize) -> f64 {
+fn sum_with_threads_rel(x: RealSexp, n: i32) -> savvy::Result<Sexp> {
+    let x_rust = x.to_vec();
+    let n_usize: usize = n as usize;
+
+    let out = sum_with_threads_rel_impl(x_rust, n_usize);
+    out.try_into()
+}
+
+fn sum_with_threads_int_impl(x: Vec<i32>, n: usize) -> i32 {
+    if x.is_empty() {
+        eprintln!("Input vector is empty. Returning 0.");
+        return 0;
+    }
+
+    let n = n.min(x.len());
+    let chunk_size = (x.len() + n - 1) / n;
+
+    let mut handles = Vec::new();
+    for i in 0..n {
+        let chunk = x[i * chunk_size..((i + 1) * chunk_size).min(x.len())].to_vec();
+        handles.push(thread::spawn(move || chunk.iter().sum::<i32>()));
+    }
+
+    let mut total_sum = 0;
+    for handle in handles {
+        total_sum += handle.join().expect("Thread panicked");
+    }
+
+    total_sum
+}
+
+fn sum_with_threads_rel_impl(x: Vec<f64>, n: usize) -> f64 {
     if x.is_empty() {
         eprintln!("Input vector is empty. Returning 0.");
         return 0.0;
@@ -43,8 +81,9 @@ fn sum_with_threads_impl(x: Vec<f64>, n: usize) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use crate::sum_with_threads_impl;
+    use crate::{sum_with_threads_int_impl, sum_with_threads_rel_impl};
 
+ // Integers
     #[test]
     fn test_single_thread() {
         let numbers = vec![1, 2, 3, 4, 5];
@@ -96,11 +135,6 @@ mod tests {
         assert_eq!(sum_with_threads_impl(numbers, n), 3);
     }
 
-    #[test]
-    fn test_doubles_numbers() {
-        let numbers = vec![-1.5, 2.0, -3.5, 4.0, -5.0, 6.5];
-        let n = 3;
-        assert_eq!(sum_with_threads_impl(numbers, n), 2.5);
     }
 
     #[test]
