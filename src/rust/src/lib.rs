@@ -1,9 +1,9 @@
 use savvy::{savvy, NumericSexp, NumericTypedSexp, IntegerSexp, RealSexp, Sexp};
 use std::thread;
 
-/// Calculate the sum of a vector of integers using multiple threads.
+/// Calculate the sum of a vector of integers/doubles using multiple threads.
 ///
-/// @param x A vector of integers to sum over.
+/// @param x A vector of integers/doubles to sum over.
 /// @param n The number of threads used to compute this calculation (int).
 ///
 /// @return The sum of all elements of the input vector.
@@ -83,65 +83,123 @@ fn sum_with_threads_rel_impl(x: Vec<f64>, n: usize) -> f64 {
 mod tests {
     use crate::{sum_with_threads_int_impl, sum_with_threads_rel_impl};
 
- // Integers
+ /// Integers
     #[test]
-    fn test_single_thread() {
+    fn test_single_thread_int() {
         let numbers = vec![1, 2, 3, 4, 5];
         let n = 1;
-        assert_eq!(sum_with_threads_impl(numbers, n), 15);
+        assert_eq!(sum_with_threads_int_impl(numbers, n), 15);
     }
 
     #[test]
-    fn test_multiple_threads() {
+    fn test_multiple_threads_int() {
         let x = vec![1, 2, 3, 4];
         let num_threads = 2;
 
-        let result = sum_with_threads_impl(x, num_threads);
+        let result = sum_with_threads_int_impl(x, num_threads);
         assert_eq!(result, 10);
     }
 
     #[test]
-    fn test_more_threads_than_elements() {
+    fn test_more_threads_than_elements_int() {
         let numbers = vec![1, 2, 3, 4, 5];
         let n = 10;
-        assert_eq!(sum_with_threads_impl(numbers, n), 15);
+        assert_eq!(sum_with_threads_int_impl(numbers, n), 15);
     }
 
     #[test]
-    fn test_empty_vector() {
+    fn test_empty_vector_int() {
         let numbers: Vec<i32> = vec![];
         let n = 4;
-        assert_eq!(sum_with_threads_impl(numbers, n), 0);
+        assert_eq!(sum_with_threads_int_impl(numbers, n), 0);
     }
 
     #[test]
-    fn test_large_numbers() {
+    fn test_large_numbers_int() {
         let numbers = vec![1_000_000, 2_000_000, 3_000_000];
         let n = 3;
-        assert_eq!(sum_with_threads_impl(numbers, n), 6_000_000);
+        assert_eq!(sum_with_threads_int_impl(numbers, n), 6_000_000);
     }
 
     #[test]
-    fn test_negative_numbers() {
+    fn test_negative_numbers_int() {
         let numbers = vec![-1, -2, -3, -4, -5];
         let n = 2;
-        assert_eq!(sum_with_threads_impl(numbers, n), -15);
+        assert_eq!(sum_with_threads_int_impl(numbers, n), -15);
     }
 
     #[test]
-    fn test_mixed_numbers() {
+    fn test_mixed_numbers_int() {
         let numbers = vec![-1, 2, -3, 4, -5, 6];
         let n = 3;
-        assert_eq!(sum_with_threads_impl(numbers, n), 3);
-    }
-
+        assert_eq!(sum_with_threads_int_impl(numbers, n), 3);
     }
 
     #[test]
-    fn test_large_vector() {
+    fn test_large_vector_int() {
         let numbers: Vec<i32> = (1..=1_000).collect();
         let n = 4;
         let expected_sum: i32 = (1..=1_000).sum();
-        assert_eq!(sum_with_threads_impl(numbers, n), expected_sum);
+        assert_eq!(sum_with_threads_int_impl(numbers, n), expected_sum);
     }
+}
+
+/// Real/doubles
+#[test]
+fn test_single_thread_rel() {
+    let numbers = vec![1.0, 2.0, 3.0, 4.0, 5.0];
+    let n = 1;
+    assert_eq!(sum_with_threads_rel_impl(numbers, n), 15.0);
+}
+
+#[test]
+fn test_multiple_threads_rel() {
+    let x = vec![1.0, 2.0, 3.0, 4.0];
+    let num_threads = 2;
+
+    let result = sum_with_threads_rel_impl(x, num_threads);
+    assert_eq!(result, 10.0);
+}
+
+#[test]
+fn test_more_threads_than_elements_rel() {
+    let numbers = vec![1.0, 2.0, 3.0, 4.0, 5.0];
+    let n = 10;
+    assert_eq!(sum_with_threads_rel_impl(numbers, n), 15.0);
+}
+
+#[test]
+fn test_empty_vector_rel() {
+    let numbers: Vec<f64> = vec![];
+    let n = 4;
+    assert_eq!(sum_with_threads_rel_impl(numbers, n), 0);
+}
+
+#[test]
+fn test_large_numbers_rel() {
+    let numbers = vec![1_000_000, 2_000_000, 3_000_000];
+    let n = 3;
+    assert_eq!(sum_with_threads_rel_impl(numbers, n), 6_000_000);
+}
+
+#[test]
+fn test_negative_numbers_rel() {
+    let numbers = vec![-1.0, -2.0, -3.0, -4.0, -5.0];
+    let n = 2;
+    assert_eq!(sum_with_threads_rel_impl(numbers, n), -15.0);
+}
+
+#[test]
+fn test_mixed_numbers_rel() {
+    let numbers = vec![-1.0, 2.0, -3.0, 4.0, -5.0, 6.0];
+    let n = 3;
+    assert_eq!(sum_with_threads_rel_impl(numbers, n), 3.0);
+}
+
+#[test]
+fn test_large_vector_rel() {
+    let numbers: Vec<f64> = (1..=1_000).collect();
+    let n = 4;
+    let expected_sum: i32 = (1..=1_000).sum();
+    assert_eq!(sum_with_threads_rel_impl(numbers, n), expected_sum);
 }
