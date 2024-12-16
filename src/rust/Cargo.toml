@@ -7,7 +7,7 @@ edition = "2021"
 crate-type = ["staticlib", "lib"]
 
 [dependencies]
- savvy = "*"
+savvy = "*"
 
 [features]
 savvy-test = []
