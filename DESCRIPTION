@@ -1,5 +1,5 @@
 Package: blazr
-Title: What the Package Does (One Line, Title Case)
+Title: Blazingly Fast Multi-Threading Interface for R Using Rust
 Version: 0.0.0.9000
 Authors@R: c(
     person("Jackson", "Hoffart", , "jackson.hoffart@gmail.com", role = c("aut", "cre"),
@@ -7,7 +7,8 @@ Authors@R: c(
     person("Bolívar", "Aponte Rolón", role = "aut",
            comment = c(ORCID = "0000-0002-2544-4551"))
   )
-Description: What the package does (one paragraph).
+Description: A tool for performing multi-threaded computations in R, powered by 
+  Rust.
 License: MIT + file LICENSE
 URL: https://github.com/r-staceans/blazr, https://r-staceans.github.io/blazr/
 BugReports: https://github.com/r-staceans/blazr/issues

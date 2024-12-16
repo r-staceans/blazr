@@ -4,11 +4,11 @@
 \name{blazr-package}
 \alias{blazr}
 \alias{blazr-package}
-\title{blazr: What the Package Does (One Line, Title Case)}
+\title{blazr: Blazingly Fast Multi-Threading Interface for R Using Rust}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-What the package does (one paragraph).
+A tool for performing multi-threaded computations in R, powered by Rust.
 }
 \seealso{
 Useful links:
