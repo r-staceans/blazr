@@ -22,5 +22,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Jackson Hoffart \email{jackson.hoffart@gmail.com} (\href{https://orcid.org/0000-0002-8600-5042}{ORCID})
 
+Authors:
+\itemize{
+  \item Bolívar Aponte Rolón (\href{https://orcid.org/0000-0002-2544-4551}{ORCID})
+}
+
 }
 \keyword{internal}

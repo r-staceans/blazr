@@ -4,10 +4,9 @@ Version: 0.0.0.9000
 Authors@R: c(
     person("Jackson", "Hoffart", , "jackson.hoffart@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-8600-5042")),
-    person("Bolívar", "Aponte Rolón", , "bolaponte@pm.me", role = c("aut"),
+    person("Bolívar", "Aponte Rolón", role = "aut",
            comment = c(ORCID = "0000-0002-2544-4551"))
-           
-)
+  )
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 URL: https://github.com/r-staceans/blazr, https://r-staceans.github.io/blazr/
