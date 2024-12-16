@@ -12,7 +12,7 @@ use std::thread;
 #[savvy]
 fn sum_with_threads(x: NumericSexp, n: i32) -> savvy::Result<savvy::Sexp> {
     match x.into_typed() {
-        NumericTypedSexp::Integer(i) => sum_with_threads_int(i,n),
+        NumericTypedSexp::Integer(i) => sum_with_threads_int(i, n),
         NumericTypedSexp::Real(r) => sum_with_threads_rel(r, n),
     }
 }
