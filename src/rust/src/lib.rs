@@ -1,9 +1,9 @@
 use savvy::{savvy, RealSexp};
 use std::thread;
 
-/// Calculate the sum of a vector of numbers using multiple threads.
+/// Calculate the sum of a vector of real numbers using multiple threads.
 ///
-/// @param x A vector of numbers to sum over.
+/// @param x A vector of real numbers to sum over.
 /// @param n The number of threads used to compute this calculation (int).
 ///
 /// @return The sum of all elements of the input vector.
