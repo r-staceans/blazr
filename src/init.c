@@ -34,14 +34,14 @@ SEXP handle_result(SEXP res_) {
     return (SEXP)res;
 }
 
-SEXP savvy_sum_with_threads__impl(SEXP c_arg__x, SEXP c_arg__n) {
-    SEXP res = savvy_sum_with_threads__ffi(c_arg__x, c_arg__n);
+SEXP savvy_sum_with_threads_real__impl(SEXP c_arg__x, SEXP c_arg__n) {
+    SEXP res = savvy_sum_with_threads_real__ffi(c_arg__x, c_arg__n);
     return handle_result(res);
 }
 
 
 static const R_CallMethodDef CallEntries[] = {
-    {"savvy_sum_with_threads__impl", (DL_FUNC) &savvy_sum_with_threads__impl, 2},
+    {"savvy_sum_with_threads_real__impl", (DL_FUNC) &savvy_sum_with_threads_real__impl, 2},
     {NULL, NULL, 0}
 };
 
