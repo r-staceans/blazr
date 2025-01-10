@@ -3,4 +3,5 @@
 S3method("$<-",savvy_blazr__sealed)
 S3method("[[<-",savvy_blazr__sealed)
 export(sum_with_threads)
+export(sum_with_threads_real)
 useDynLib(blazr, .registration = TRUE)
