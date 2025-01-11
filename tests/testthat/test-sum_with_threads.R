@@ -11,3 +11,21 @@ test_that("sums as doubles expected", {
   out <- blazr::sum_with_threads(vector_dbl, 5L)
   expect_equal(out, sum(vector_dbl))
 })
+
+test_that("with non-numeric vectors, errors as expected", {
+  vector_chr <- c("a", "b", "c")
+
+  expect_error(
+    blazr::sum_with_threads(vector_chr, 5L),
+    "must be coercible to a numeric vector"
+    )
+})
+
+test_that("with non-integer threads, errors as expected", {
+  vector_int <- 1:10
+
+  expect_error(
+    blazr::sum_with_threads(1:10, 5.5),
+    "must be coercible to an integer"
+    )
+})

@@ -37,16 +37,14 @@ NULL
   stop(class, " cannot be modified", call. = FALSE)
 }
 
-#' Calculate the sum of a vector of integers using multiple threads.
+#' Calculate the sum of a vector of real numbers using multiple threads.
 #'
-#' @param x A vector of integers to sum over.
+#' @param x A vector of real numbers to sum over.
 #' @param n The number of threads used to compute this calculation (int).
 #'
 #' @return The sum of all elements of the input vector.
-#'
-#' @export
-`sum_with_threads` <- function(`x`, `n`) {
-  .Call(savvy_sum_with_threads__impl, `x`, `n`)
+`sum_with_threads_real` <- function(`x`, `n`) {
+  .Call(savvy_sum_with_threads_real__impl, `x`, `n`)
 }
 
 
