@@ -2,12 +2,12 @@
 % Please edit documentation in R/000-wrappers.R
 \name{sum_with_threads_real}
 \alias{sum_with_threads_real}
-\title{Calculate the sum of a vector of numbers using multiple threads.}
+\title{Calculate the sum of a vector of real numbers using multiple threads.}
 \usage{
 sum_with_threads_real(x, n)
 }
 \arguments{
-\item{x}{A vector of numbers to sum over.}
+\item{x}{A vector of real numbers to sum over.}
 
 \item{n}{The number of threads used to compute this calculation (int).}
 }
@@ -15,5 +15,5 @@ sum_with_threads_real(x, n)
 The sum of all elements of the input vector.
 }
 \description{
-Calculate the sum of a vector of numbers using multiple threads.
+Calculate the sum of a vector of real numbers using multiple threads.
 }

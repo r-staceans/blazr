@@ -7,8 +7,6 @@ use std::thread;
 /// @param n The number of threads used to compute this calculation (int).
 ///
 /// @return The sum of all elements of the input vector.
-///
-/// @export
 #[savvy]
 fn sum_with_threads_real(x: RealSexp, n: i32) -> savvy::Result<savvy::Sexp> {
     let x_rust = x.to_vec();

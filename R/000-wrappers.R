@@ -43,8 +43,6 @@ NULL
 #' @param n The number of threads used to compute this calculation (int).
 #'
 #' @return The sum of all elements of the input vector.
-#'
-#' @export
 `sum_with_threads_real` <- function(`x`, `n`) {
   .Call(savvy_sum_with_threads_real__impl, `x`, `n`)
 }
